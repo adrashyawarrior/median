@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { User } from "@prisma/client";
+import { Transform } from "class-transformer";
 
 export class UserEntity implements User {
     @ApiProperty()
@@ -10,4 +11,7 @@ export class UserEntity implements User {
 
     @ApiProperty()
     email: string;
+
+    @ApiProperty({ type: Number })
+    age: number
 }
