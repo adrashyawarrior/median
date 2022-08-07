@@ -1,12 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './entities/user.entity';
+import { ConnectionArgs } from 'src/page/connection-args.dto';
+import { ApiPageResponse } from 'src/page/api-page-response.decorator';
 
 @Controller('users')
 @ApiTags('users')
+// @ApiExtraModels(Page)
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
@@ -20,6 +23,12 @@ export class UsersController {
   @ApiOkResponse({ type: [UserEntity] })
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @Get('page')
+  @ApiPageResponse(UserEntity)
+  async findPage(@Query() connectionArgs: ConnectionArgs) {
+    return this.usersService.findPage(connectionArgs);
   }
 
   @Get(':id')
@@ -39,4 +48,5 @@ export class UsersController {
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
   }
+
 }
